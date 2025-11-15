@@ -1,17 +1,30 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "d202a1f553d02ff71b85d29633119de9"
-name = "WaNotify"
-handle = "wanotify-app-2025"
-application_url = "https://octantal-adriane-removably.ngrok-free.dev"
+client_id = "73435a800321b76a8cfe34cb447c5609"
+name = "WhatsApp Analytics for Shopify"
+handle = "whatsapp-analytics-shopify"
+application_url = "https://zaptool.online"
 embedded = true
+
+[app_store]
+# App Store Configuration for Public Distribution
+category = "marketing"
+subcategory = "messaging"
+keywords = ["whatsapp", "cart abandonment", "analytics", "messaging", "automation"]
+short_description = "Recover abandoned carts and engage customers with WhatsApp messaging and analytics"
+long_description = "Comprehensive WhatsApp messaging solution for Shopify stores. Automatically recover abandoned carts, send order notifications, and track customer engagement with detailed analytics. Easy setup with pre-built templates."
+app_url = "https://zaptool.online"
+support_email = "zaptoolonline@gmail.com"
+support_url = "https://zaptool.online/support"
+privacy_policy_url = "https://zaptool.online/privacy"
+terms_of_service_url = "https://zaptool.online/terms"
 
 [build]
 automatically_update_urls_on_dev = true
 dev_store_url = ""
 
 [webhooks]
-api_version = "2025-07"
+api_version = "2026-01"
 
   [[webhooks.subscriptions]]
   uri = "/webhooks/customers/data_request"
@@ -59,9 +72,9 @@ scopes = "read_orders,write_orders,write_products,read_customers"
 
 [auth]
 redirect_urls = [
-  "https://octantal-adriane-removably.ngrok-free.dev/auth/callback",
-  "https://octantal-adriane-removably.ngrok-free.dev/auth/shopify/callback", 
-  "https://octantal-adriane-removably.ngrok-free.dev/api/auth/callback"
+  "https://zaptool.online/auth/callback",
+  "https://zaptool.online/auth/shopify/callback", 
+  "https://zaptool.online/api/auth/callback"
 ]
 
 [pos]

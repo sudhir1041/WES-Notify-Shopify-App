@@ -1,6 +1,15 @@
 {
-  "name": "test-app",
-  "private": true,
+  "name": "whatsapp-analytics-shopify",
+  "version": "1.0.0",
+  "description": "WhatsApp Analytics and Cart Abandonment Recovery for Shopify",
+  "private": false,
+  "license": "MIT",
+  "homepage": "https://zaptool.online",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sudhir1041/WES-Notify-Shopify-App"
+  },
+  "keywords": ["shopify", "whatsapp", "cart-abandonment", "analytics", "messaging"],
   "scripts": {
     "build": "remix vite:build",
     "dev": "shopify app dev",
@@ -16,7 +25,8 @@
     "shopify": "shopify",
     "prisma": "prisma",
     "graphql-codegen": "graphql-codegen",
-    "vite": "vite"
+    "vite": "vite",
+    "verify-public": "node scripts/verify-public-setup.js"
   },
   "type": "module",
   "engines": {

@@ -18,6 +18,7 @@ shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
+  isEmbeddedApp: true,
   webhooks: {
     ORDERS_PAID: {
       deliveryMethod: "http",

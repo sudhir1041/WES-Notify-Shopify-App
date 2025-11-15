@@ -43,16 +43,16 @@ function checkShopifyConfig() {
     const configPath = path.join(process.cwd(), 'shopify.app.toml');
     const configContent = fs.readFileSync(configPath, 'utf8');
     
-    if (configContent.includes('[app_store]')) {
-      checks.push('✅ App Store configuration present');
+    if (configContent.includes('WhatsApp Analytics for Shopify')) {
+      checks.push('✅ App name configured for public distribution');
     } else {
-      checks.push('❌ App Store configuration missing in shopify.app.toml');
+      checks.push('❌ App name should be updated for public distribution');
     }
     
-    if (configContent.includes('category = "marketing"')) {
-      checks.push('✅ App Store category set');
+    if (configContent.includes('# App Store configuration is done in Shopify Partner Dashboard')) {
+      checks.push('✅ Partner Dashboard configuration noted');
     } else {
-      checks.push('❌ App Store category not configured');
+      checks.push('❌ Add Partner Dashboard configuration note');
     }
   } catch (error) {
     checks.push('❌ shopify.app.toml not found');
@@ -133,9 +133,9 @@ console.log(`\n📊 Summary: ${passedChecks.length} passed, ${failedChecks.lengt
 if (failedChecks.length === 0) {
   console.log('\n🎉 Your app is ready for public distribution!');
   console.log('\nNext steps:');
-  console.log('1. Deploy to production environment');
-  console.log('2. Submit to Shopify App Store');
-  console.log('3. Configure production database');
+  console.log('1. Run: shopify app deploy');
+  console.log('2. Configure Partner Dashboard (see PARTNER_DASHBOARD_SETUP.md)');
+  console.log('3. Submit to Shopify App Store for review');
 } else {
   console.log('\n⚠️  Please fix the failed checks before deploying.');
 }

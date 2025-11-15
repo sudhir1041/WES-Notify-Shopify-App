@@ -6,18 +6,9 @@ handle = "whatsapp-analytics-shopify"
 application_url = "https://zaptool.online"
 embedded = true
 
-[app_store]
-# App Store Configuration for Public Distribution
-category = "marketing"
-subcategory = "messaging"
-keywords = ["whatsapp", "cart abandonment", "analytics", "messaging", "automation"]
-short_description = "Recover abandoned carts and engage customers with WhatsApp messaging and analytics"
-long_description = "Comprehensive WhatsApp messaging solution for Shopify stores. Automatically recover abandoned carts, send order notifications, and track customer engagement with detailed analytics. Easy setup with pre-built templates."
-app_url = "https://zaptool.online"
-support_email = "zaptoolonline@gmail.com"
-support_url = "https://zaptool.online/support"
-privacy_policy_url = "https://zaptool.online/privacy"
-terms_of_service_url = "https://zaptool.online/terms"
+# App Store configuration is done in Shopify Partner Dashboard
+# Category: Marketing > Messaging
+# Keywords: whatsapp, cart abandonment, analytics, messaging, automation
 
 [build]
 automatically_update_urls_on_dev = true

@@ -1,18 +1,23 @@
 import { json } from "@remix-run/node";
-import { useLoaderData, Form } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 
 export const loader = async ({ request }) => {
-  const url = new URL(request.url);
-  const shop = url.searchParams.get("shop");
-  
-  return json({
-    shop,
-    installUrl: shop 
-      ? `https://${shop}/admin/oauth/authorize?client_id=${process.env.SHOPIFY_API_KEY}&scope=${process.env.SCOPES}&redirect_uri=${process.env.SHOPIFY_APP_URL}/auth/callback&state=nonce`
-      : null,
-    appUrl: process.env.SHOPIFY_APP_URL
-  });
+  try {
+    const url = new URL(request.url);
+    const shop = url.searchParams.get("shop");
+    
+    return json({
+      shop,
+      installUrl: shop 
+        ? `https://${shop}/admin/oauth/authorize?client_id=${process.env.SHOPIFY_API_KEY}&scope=${process.env.SCOPES}&redirect_uri=${process.env.SHOPIFY_APP_URL}/auth/callback&state=nonce`
+        : null,
+      appUrl: process.env.SHOPIFY_APP_URL
+    });
+  } catch (error) {
+    console.error('Loader error:', error);
+    return json({ shop: null, installUrl: null, appUrl: process.env.SHOPIFY_APP_URL });
+  }
 };
 
 export default function Index() {
@@ -21,19 +26,61 @@ export default function Index() {
 
   if (shop && installUrl) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="mb-6">
-            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">📱</span>
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem'
+      }}>
+        <div style={{
+          maxWidth: '28rem',
+          width: '100%',
+          backgroundColor: 'white',
+          borderRadius: '1rem',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          padding: '2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{
+              width: '4rem',
+              height: '4rem',
+              backgroundColor: '#22c55e',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem',
+              fontSize: '1.5rem'
+            }}>
+              📱
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Ready to Install</h1>
-            <p className="text-gray-600">Install WhatsApp Analytics for your store: <strong>{shop}</strong></p>
+            <h1 style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: '#111827',
+              marginBottom: '0.5rem'
+            }}>Ready to Install</h1>
+            <p style={{ color: '#6b7280' }}>Install WhatsApp Analytics for your store: <strong>{shop}</strong></p>
           </div>
           
           <a 
             href={installUrl}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 inline-block"
+            style={{
+              display: 'inline-block',
+              width: '100%',
+              backgroundColor: '#16a34a',
+              color: 'white',
+              fontWeight: '600',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '0.5rem',
+              textDecoration: 'none',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#15803d'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#16a34a'}
           >
             Install WhatsApp Analytics
           </a>
@@ -50,49 +97,138 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{ minHeight: '100vh', backgroundColor: 'white', fontFamily: 'Inter, sans-serif' }}>
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-xl">📱</span>
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900">WhatsApp Analytics</h1>
+      <header style={{
+        backgroundColor: 'white',
+        borderBottom: '1px solid #e5e7eb',
+        padding: '1.5rem 0'
+      }}>
+        <div style={{
+          maxWidth: '80rem',
+          margin: '0 auto',
+          padding: '0 1rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{
+              width: '2.5rem',
+              height: '2.5rem',
+              backgroundColor: '#22c55e',
+              borderRadius: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: '0.75rem',
+              fontSize: '1.25rem'
+            }}>
+              📱
             </div>
-            <a href="/support" className="text-green-600 hover:text-green-700 font-medium">
-              Support
-            </a>
+            <h1 style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: '#111827'
+            }}>WhatsApp Analytics</h1>
           </div>
+          <a href="/support" style={{
+            color: '#16a34a',
+            fontWeight: '500',
+            textDecoration: 'none'
+          }}>Support</a>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-green-50 to-blue-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+      <section style={{
+        background: 'linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)',
+        padding: '5rem 0',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          maxWidth: '80rem',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          <h1 style={{
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            color: '#111827',
+            marginBottom: '1.5rem',
+            lineHeight: '1.1'
+          }}>
             Recover Abandoned Carts with WhatsApp
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p style={{
+            fontSize: '1.25rem',
+            color: '#6b7280',
+            marginBottom: '2rem',
+            maxWidth: '48rem',
+            margin: '0 auto 2rem'
+          }}>
             Boost your Shopify store's revenue with automated WhatsApp messaging, cart abandonment recovery, and detailed analytics. Increase conversions by up to 30%.
           </p>
           
           {/* Installation Form */}
-          <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Install on Your Store</h3>
-            <div className="space-y-4">
+          <div style={{
+            maxWidth: '28rem',
+            margin: '0 auto',
+            backgroundColor: 'white',
+            borderRadius: '0.75rem',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+            padding: '1.5rem'
+          }}>
+            <h3 style={{
+              fontSize: '1.125rem',
+              fontWeight: '600',
+              color: '#111827',
+              marginBottom: '1rem'
+            }}>Install on Your Store</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <input
                 type="text"
                 placeholder="my-shop-domain.myshopify.com"
                 value={shopDomain}
                 onChange={(e) => setShopDomain(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#22c55e';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(34, 197, 94, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
               <button
                 onClick={handleInstall}
                 disabled={!shopDomain}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                style={{
+                  width: '100%',
+                  backgroundColor: shopDomain ? '#16a34a' : '#d1d5db',
+                  color: 'white',
+                  fontWeight: '600',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '0.5rem',
+                  border: 'none',
+                  cursor: shopDomain ? 'pointer' : 'not-allowed',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  if (shopDomain) e.target.style.backgroundColor = '#15803d';
+                }}
+                onMouseOut={(e) => {
+                  if (shopDomain) e.target.style.backgroundColor = '#16a34a';
+                }}
               >
                 Install App
               </button>
@@ -102,82 +238,229 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Powerful Features for Your Store</h2>
-            <p className="text-lg text-gray-600">Everything you need to engage customers and recover lost sales</p>
+      <section style={{
+        padding: '5rem 0',
+        backgroundColor: 'white'
+      }}>
+        <div style={{
+          maxWidth: '80rem',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '4rem'
+          }}>
+            <h2 style={{
+              fontSize: '1.875rem',
+              fontWeight: 'bold',
+              color: '#111827',
+              marginBottom: '1rem'
+            }}>Powerful Features for Your Store</h2>
+            <p style={{
+              fontSize: '1.125rem',
+              color: '#6b7280'
+            }}>Everything you need to engage customers and recover lost sales</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🛒</span>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem'
+          }}>
+            <div style={{
+              textAlign: 'center',
+              padding: '1.5rem'
+            }}>
+              <div style={{
+                width: '4rem',
+                height: '4rem',
+                backgroundColor: '#dbeafe',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                fontSize: '1.5rem'
+              }}>
+                🛒
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Cart Abandonment Recovery</h3>
-              <p className="text-gray-600">Automatically detect abandoned carts and send personalized WhatsApp messages to recover lost sales with customizable timing and templates.</p>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#111827',
+                marginBottom: '0.75rem'
+              }}>Cart Abandonment Recovery</h3>
+              <p style={{ color: '#6b7280' }}>Automatically detect abandoned carts and send personalized WhatsApp messages to recover lost sales with customizable timing and templates.</p>
             </div>
             
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">📊</span>
+            <div style={{
+              textAlign: 'center',
+              padding: '1.5rem'
+            }}>
+              <div style={{
+                width: '4rem',
+                height: '4rem',
+                backgroundColor: '#dcfce7',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                fontSize: '1.5rem'
+              }}>
+                📊
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Real-time Analytics</h3>
-              <p className="text-gray-600">Track message delivery rates, conversion metrics, and campaign performance with detailed analytics and insights to optimize your strategy.</p>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#111827',
+                marginBottom: '0.75rem'
+              }}>Real-time Analytics</h3>
+              <p style={{ color: '#6b7280' }}>Track message delivery rates, conversion metrics, and campaign performance with detailed analytics and insights to optimize your strategy.</p>
             </div>
             
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
+            <div style={{
+              textAlign: 'center',
+              padding: '1.5rem'
+            }}>
+              <div style={{
+                width: '4rem',
+                height: '4rem',
+                backgroundColor: '#f3e8ff',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                fontSize: '1.5rem'
+              }}>
+                ⚡
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Easy Setup & Automation</h3>
-              <p className="text-gray-600">Quick 5-minute setup with pre-built templates and workflows. No coding required - just connect your WhatsApp Business API and start recovering carts.</p>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#111827',
+                marginBottom: '0.75rem'
+              }}>Easy Setup & Automation</h3>
+              <p style={{ color: '#6b7280' }}>Quick 5-minute setup with pre-built templates and workflows. No coding required - just connect your WhatsApp Business API and start recovering carts.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Proven Results</h2>
-            <p className="text-lg text-gray-600">Join thousands of Shopify merchants increasing their revenue</p>
+      <section style={{
+        padding: '5rem 0',
+        backgroundColor: '#f9fafb'
+      }}>
+        <div style={{
+          maxWidth: '80rem',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '4rem'
+          }}>
+            <h2 style={{
+              fontSize: '1.875rem',
+              fontWeight: 'bold',
+              color: '#111827',
+              marginBottom: '1rem'
+            }}>Proven Results</h2>
+            <p style={{
+              fontSize: '1.125rem',
+              color: '#6b7280'
+            }}>Join thousands of Shopify merchants increasing their revenue</p>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '2rem',
+            textAlign: 'center'
+          }}>
             <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">30%</div>
-              <div className="text-gray-600">Average conversion increase</div>
+              <div style={{
+                fontSize: '2.25rem',
+                fontWeight: 'bold',
+                color: '#16a34a',
+                marginBottom: '0.5rem'
+              }}>30%</div>
+              <div style={{ color: '#6b7280' }}>Average conversion increase</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">85%</div>
-              <div className="text-gray-600">Message delivery rate</div>
+              <div style={{
+                fontSize: '2.25rem',
+                fontWeight: 'bold',
+                color: '#16a34a',
+                marginBottom: '0.5rem'
+              }}>85%</div>
+              <div style={{ color: '#6b7280' }}>Message delivery rate</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">5min</div>
-              <div className="text-gray-600">Setup time</div>
+              <div style={{
+                fontSize: '2.25rem',
+                fontWeight: 'bold',
+                color: '#16a34a',
+                marginBottom: '0.5rem'
+              }}>5min</div>
+              <div style={{ color: '#6b7280' }}>Setup time</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">24/7</div>
-              <div className="text-gray-600">Automated messaging</div>
+              <div style={{
+                fontSize: '2.25rem',
+                fontWeight: 'bold',
+                color: '#16a34a',
+                marginBottom: '0.5rem'
+              }}>24/7</div>
+              <div style={{ color: '#6b7280' }}>Automated messaging</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-green-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+      <section style={{
+        padding: '5rem 0',
+        backgroundColor: '#16a34a',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          maxWidth: '64rem',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          <h2 style={{
+            fontSize: '1.875rem',
+            fontWeight: 'bold',
+            color: 'white',
+            marginBottom: '1rem'
+          }}>
             Ready to Recover More Sales?
           </h2>
-          <p className="text-xl text-green-100 mb-8">
+          <p style={{
+            fontSize: '1.25rem',
+            color: '#bbf7d0',
+            marginBottom: '2rem'
+          }}>
             Install WhatsApp Analytics today and start converting abandoned carts into revenue.
           </p>
           <a 
             href="https://apps.shopify.com" 
-            className="bg-white text-green-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition duration-200 inline-block"
+            style={{
+              backgroundColor: 'white',
+              color: '#16a34a',
+              fontWeight: '600',
+              padding: '0.75rem 2rem',
+              borderRadius: '0.5rem',
+              textDecoration: 'none',
+              display: 'inline-block',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+            onMouseOut={(e) => e.target.style.backgroundColor = 'white'}
           >
             Find in Shopify App Store
           </a>
@@ -185,15 +468,99 @@ export default function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
+      <footer style={{
+        backgroundColor: '#111827',
+        color: 'white',
+        padding: '3rem 0'
+      }}>
+        <div style={{
+          maxWidth: '80rem',
+          margin: '0 auto',
+          padding: '0 1rem'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '2rem'
+          }}>
             <div>
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center mr-2">
-                  <span className="text-sm">📱</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '1rem'
+              }}>
+                <div style={{
+                  width: '2rem',
+                  height: '2rem',
+                  backgroundColor: '#22c55e',
+                  borderRadius: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '0.5rem',
+                  fontSize: '0.875rem'
+                }}>
+                  📱
                 </div>
-                <span className="font-bold">WhatsApp Analytics</span>
+                <span style={{ fontWeight: 'bold' }}>WhatsApp Analytics</span>
+              </div>
+              <p style={{ color: '#9ca3af' }}>Boost your Shopify store revenue with automated WhatsApp messaging.</p>
+            </div>
+            <div>
+              <h4 style={{
+                fontWeight: '600',
+                marginBottom: '1rem'
+              }}>Support</h4>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem'
+              }}>
+                <a href="/support" style={{
+                  color: '#9ca3af',
+                  textDecoration: 'none'
+                }}>Help Center</a>
+                <a href="mailto:zaptoolonline@gmail.com" style={{
+                  color: '#9ca3af',
+                  textDecoration: 'none'
+                }}>Contact Us</a>
+              </div>
+            </div>
+            <div>
+              <h4 style={{
+                fontWeight: '600',
+                marginBottom: '1rem'
+              }}>Legal</h4>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem'
+              }}>
+                <a href="/terms" style={{
+                  color: '#9ca3af',
+                  textDecoration: 'none'
+                }}>Terms of Service</a>
+                <a href="/privacy" style={{
+                  color: '#9ca3af',
+                  textDecoration: 'none'
+                }}>Privacy Policy</a>
+              </div>
+            </div>
+          </div>
+          <div style={{
+            borderTop: '1px solid #374151',
+            marginTop: '2rem',
+            paddingTop: '2rem',
+            textAlign: 'center',
+            color: '#9ca3af'
+          }}>
+            <p>&copy; 2024 WhatsApp Analytics. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}-bold">WhatsApp Analytics</span>
               </div>
               <p className="text-gray-400">Boost your Shopify store revenue with automated WhatsApp messaging.</p>
             </div>

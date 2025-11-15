@@ -2,6 +2,8 @@ import { vitePlugin as remix } from "@remix-run/dev";
 import { installGlobals } from "@remix-run/node";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import tailwindcss from "tailwindcss";
+import autoprefixer from "autoprefixer";
 
 installGlobals({ nativeFetch: true });
 
@@ -48,6 +50,11 @@ export default defineConfig({
     fs: {
       // See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
       allow: ["app", "node_modules"],
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [tailwindcss, autoprefixer],
     },
   },
   plugins: [

@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
@@ -10,26 +9,11 @@ export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
-
   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
 };
 
 export default function App() {
   const { apiKey } = useLoaderData();
-
-  // Prevent extension errors from breaking the app
-  React.useEffect(() => {
-    const handleError = (event) => {
-      if (event.error?.message?.includes('removeAttribute') || 
-          event.error?.message?.includes('chrome-extension')) {
-        event.preventDefault();
-        console.warn('Browser extension error suppressed:', event.error);
-      }
-    };
-    
-    window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
-  }, []);
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
